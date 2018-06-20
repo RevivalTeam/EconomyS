@@ -2,7 +2,7 @@
 
 /*
  * EconomyS, the massive economy plugin with many features for PocketMine-MP
- * Copyright (C) 2013-2017  onebone <jyc00410@gmail.com>
+ * Copyright (C) 2013-2015  onebone <jyc00410@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,33 +22,11 @@ namespace onebone\economyapi\task;
 
 use onebone\economyapi\EconomyAPI;
 
-use pocketmine\scheduler\PluginTask;
+use pocketmine\scheduler\Task;
 
-if((new \ReflectionClass("pocketmine\\plugin\\PluginBase"))->getMethod("onCommand")->hasReturnType()){
-	abstract class _SaveTask extends PluginTask{
-		public function onRun(int $currentTick){
-			$this->_onRun($currentTick);
-		}
-
-		abstract public function _onRun(int $currentTick);
-	}
-}else{
-	abstract class _SaveTask extends PluginTask{
-		public function onRun($currentTick){
-			$this->_onRun($currentTick);
-		}
-
-		abstract public function _onRun(int $currentTick);
+class SaveTask extends Task {
+	
+	public function onRun(int $currentTick){
+		$this->getOwner()->save();
 	}
 }
-
-class SaveTask extends _SaveTask{
-	public function __construct(EconomyAPI $plugin){
-		parent::__construct($plugin);
-	}
-
-	public function _onRun(int $currentTick){
-		$this->getOwner()->saveAll();
-	}
-}
-
